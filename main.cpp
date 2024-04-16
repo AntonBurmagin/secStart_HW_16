@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+
 
 double calculatorAction(std::string str, int i) {
     double res = 0;
@@ -15,6 +17,16 @@ double calculatorAction(std::string str, int i) {
     }
     return res;
 }
+
+enum Notes {
+    DO = 1,
+    RE = 2,
+    MI = 4,
+    FA = 8,
+    SOL = 16,
+    LA = 32,
+    SI = 64
+};
 
 int main () {
     // 16.6.1 speedometer
@@ -67,6 +79,59 @@ int main () {
         
     }
     */
+
+    //16.6.4 Mechanic piano
+    std::string accord;
+    
+    while (true) {
+        int result[7] = {0, 0, 0, 0, 0, 0, 0};
+        std::cout << "What's your accord string (example: 245): ";
+        std::cin >> accord;
+
+        for (int i = 0; i < 7 && i < accord.length(); i++) {
+            std::cout << std::pow(2, accord[i] - '0' - 1) << std::endl;
+            if (std::pow(2, accord[i] - '0' - 1) == Notes::DO) {
+                result[i] |= DO;
+            } else if (std::pow(2, accord[i] - '0' - 1) == Notes::RE) {
+                result[i] |= RE;
+            } else if (std::pow(2, accord[i] - '0' - 1) == Notes::MI) {
+                result[i] |= MI;
+            } else if (std::pow(2, accord[i] - '0' - 1) == Notes::FA) {
+                result[i] |= FA;
+            } else if (std::pow(2, accord[i] - '0' - 1) == Notes::SOL) {
+                result[i] |= SOL;
+            } else if (std::pow(2, accord[i] - '0' - 1) == Notes::LA) {
+                result[i] |= LA;
+            } else if (std::pow(2, accord[i] - '0' - 1) == Notes::SI) {
+                result[i] |= SI;
+            }
+        }
+        for(auto r : result) {
+            if (r & DO) {
+            std::cout << "DO";
+            }
+            if (r & RE) {
+                std::cout << "RE";
+            }
+            if (r & MI) {
+                std::cout << "MI";
+            }
+            if (r & FA) {
+                std::cout << "FA";
+            }
+            if (r & SOL) {
+                std::cout << "SOL";
+            }
+            if (r & LA) {
+                std::cout << "LA";
+            }
+            if (r & SI) {
+                std::cout << "SI";
+            }
+        }
+        std::cout << std::endl;
+    }
+
 
     return 0;
 }
