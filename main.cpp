@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <sstream>
 
 
 double calculatorAction(std::string str, int i) {
@@ -27,6 +28,40 @@ enum Notes {
     LA = 32,
     SI = 64
 };
+
+enum switches { 
+    LIGHTS_INSIDE = 1, 
+    LIGHTS_OUTSIDE = 2, 
+    HEATERS = 4,
+    CONDITIONER = 8,
+};
+
+void report (int &state) {
+    std::cout << "House report: ";
+    if (state & LIGHTS_INSIDE) {
+        std::cout << "inside light ON ";
+    }
+    
+    if (state & LIGHTS_OUTSIDE) {
+        std::cout << "outside light ON ";
+    } else {
+        std::cout << "outside light OFF ";
+    }
+
+    if (state & HEATERS) {
+        std::cout << "heater is ON ";
+    } else {
+        std::cout << "heater is OFF ";
+    }
+
+    if (state & CONDITIONER) {
+        std::cout << "conditioner is ON ";
+    } else {
+        std::cout << "conditioner is OFF ";
+    }
+    std::cout << std::endl;
+    state = 0;
+}
 
 int main () {
     // 16.6.1 speedometer
@@ -81,8 +116,8 @@ int main () {
     */
 
     //16.6.4 Mechanic piano
+    /*
     std::string accord;
-    
     while (true) {
         int result[7] = {0, 0, 0, 0, 0, 0, 0};
         std::cout << "What's your accord string (example: 245): ";
@@ -131,7 +166,41 @@ int main () {
         }
         std::cout << std::endl;
     }
+    */
 
+    // 16.6.5 Smart house
+    
+    
+    int houseState = 0;
+    for (int day = 1, time = 0; day < 3; ) {
+        std::cout << "Day " << day << " time " << time << ".00" << std::endl;
+        std::stringstream information;
+        std::string info;
+        std::getline(std::cin, info);
+        information << info;
+        char movementOut, lightIn;
+        int temperatureOut, temperatureIN;
+        information >> temperatureOut >>  temperatureIN >>  movementOut >> lightIn;
+        if (temperatureOut < 7 || temperatureIN < 20) {
+            houseState |= HEATERS;
+        }
+        if (temperatureIN > 26) {
+            houseState |= CONDITIONER;
+        }
+        if (movementOut == 'y' && (time < 5 || time > 16)) {
+            houseState |= LIGHTS_OUTSIDE;
+        }
+        if (lightIn == 'y') {
+            houseState |= LIGHTS_INSIDE;
+        }
+        
+        report(houseState);
 
+        time++;
+        if (time == 24) {
+            day++;
+            time = 0;
+        }
+    }
     return 0;
 }
